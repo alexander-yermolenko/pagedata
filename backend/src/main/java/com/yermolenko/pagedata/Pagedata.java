@@ -38,6 +38,16 @@ public class Pagedata {
 	private List<String> img;
 	private List<String> a;
 
+	private IpApiData ipApiData;
+
+	public IpApiData getIpApiData() {
+		return ipApiData;
+	}
+
+	public void setIpApiData(IpApiData ipApiData) {
+		this.ipApiData = ipApiData;
+	}
+
 	public String getTitle() {
 		return title;
 	}

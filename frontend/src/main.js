@@ -40,6 +40,9 @@ extractBtn.addEventListener('click', async () => {
 
         pageData = await response.json();
         console.log('pageData:', pageData); // Debug
+        if (pageData.ipApiData && pageData.ipApiData.status === 'failed') {
+            showError('⚠️ IP geolocation data unavailable. Displaying page data only.');
+        }
         showResult(pageData);
     } catch (error) {
         showError(error.message);
@@ -97,7 +100,7 @@ function hideResult() {
 }
 
 function generateSummary(data) {
-    let summary = '<h3>📊 Page Data Summary</h3>';
+    let summary = '<h3>📊 Page Data Summary</h3><br>';
 
     const formatScalar = (label, value, emoji = '') => {
         return value ? `<p><strong>${emoji}${label}:</strong> ${value}</p>` : '';
@@ -108,6 +111,38 @@ function generateSummary(data) {
         return `<p><strong>${emoji}${label} (${list.length}):</strong></p><ul>${list.map(item => `<li>${item}</li>`).join('')}</ul>`;
     };
 
+    // IP API Data
+    if (data.ipApiData) {
+        summary += '<h4>🌍 IP and Geolocation Data</h4>';
+        summary += formatScalar('IP Address', data.ipApiData.query, '📍 ');
+        summary += formatScalar('Status', data.ipApiData.status, '📡 ');
+        summary += formatScalar('Continent', data.ipApiData.continent, '🌎 ');
+        summary += formatScalar('Country', data.ipApiData.country, '🏳️ ');
+        summary += formatScalar('Region', data.ipApiData.regionName, '🏙️ ');
+        summary += formatScalar('City', data.ipApiData.city, '🌆 ');
+        summary += formatScalar('Latitude', data.ipApiData.lat, '📍 ');
+        summary += formatScalar('Longitude', data.ipApiData.lon, '📍 ');
+        summary += formatScalar('Timezone', data.ipApiData.timezone, '⏰ ');
+        summary += formatScalar('Currency', data.ipApiData.currency, '💰 ');
+        summary += formatScalar('ISP', data.ipApiData.isp, '🌐 ');
+        summary += formatScalar('Organization', data.ipApiData.org, '🏢 ');
+        summary += formatScalar('AS Name', data.ipApiData.asname, '🔌 ');
+        summary += formatScalar('Mobile', data.ipApiData.mobile, '📱 ');
+        summary += formatScalar('Proxy', data.ipApiData.proxy, '🕵️ ');
+        summary += formatScalar('Hosting', data.ipApiData.hosting, '🖥️ ');
+
+        if (data.ipApiData.dns) {
+            summary += formatScalar('DNS Geo', data.ipApiData.dns.geo, '📡 ');
+            summary += formatScalar('DNS IP', data.ipApiData.dns.ip, '📡 ');
+        }
+        if (data.ipApiData.edns) {
+            summary += formatScalar('EDNS Geo', data.ipApiData.edns.geo, '📡 ');
+            summary += formatScalar('EDNS IP', data.ipApiData.edns.ip, '📡 ');
+        }
+    }
+
+    // Page Data
+    summary += '<br><h4>📄 Page Data</h4>';
     summary += formatScalar('Page Title', data.title, '📄 ');
     summary += formatScalar('Meta Description', data.metaNameDescription, '📄 ');
     summary += formatScalar('Meta Keywords', data.metaNameKeywords, '📄 ');
@@ -165,6 +200,7 @@ function generateXML(data) {
         return `${' '.repeat(indent)}<${key}>${escapeXML(value)}</${key}>\n`;
     };
 
+    // Page Data
     xml += addElement('Title', data.title);
     xml += addElement('MetaDescription', data.metaNameDescription);
     xml += addElement('MetaKeywords', data.metaNameKeywords);
@@ -202,6 +238,48 @@ function generateXML(data) {
 
     xml += addElement('Images', data.img);
     xml += addElement('Links', data.a);
+
+    // IP API data
+    if (data.ipApiData) {
+        xml += '  <IpApiData>\n';
+        xml += addElement('Query', data.ipApiData.query, 4);
+        xml += addElement('Status', data.ipApiData.status, 4);
+        xml += addElement('Continent', data.ipApiData.continent, 4);
+        xml += addElement('ContinentCode', data.ipApiData.continentCode, 4);
+        xml += addElement('Country', data.ipApiData.country, 4);
+        xml += addElement('CountryCode', data.ipApiData.countryCode, 4);
+        xml += addElement('Region', data.ipApiData.region, 4);
+        xml += addElement('RegionName', data.ipApiData.regionName, 4);
+        xml += addElement('City', data.ipApiData.city, 4);
+        xml += addElement('District', data.ipApiData.district, 4);
+        xml += addElement('Zip', data.ipApiData.zip, 4);
+        xml += addElement('Lat', data.ipApiData.lat, 4);
+        xml += addElement('Lon', data.ipApiData.lon, 4);
+        xml += addElement('Timezone', data.ipApiData.timezone, 4);
+        xml += addElement('Offset', data.ipApiData.offset, 4);
+        xml += addElement('Currency', data.ipApiData.currency, 4);
+        xml += addElement('Isp', data.ipApiData.isp, 4);
+        xml += addElement('Org', data.ipApiData.org, 4);
+        xml += addElement('As', data.ipApiData.as, 4);
+        xml += addElement('Asname', data.ipApiData.asname, 4);
+        xml += addElement('Mobile', data.ipApiData.mobile, 4);
+        xml += addElement('Proxy', data.ipApiData.proxy, 4);
+        xml += addElement('Hosting', data.ipApiData.hosting, 4);
+
+        if (data.ipApiData.dns) {
+            xml += '    <Dns>\n';
+            xml += addElement('Geo', data.ipApiData.dns.geo, 6);
+            xml += addElement('Ip', data.ipApiData.dns.ip, 6);
+            xml += '    </Dns>\n';
+        }
+        if (data.ipApiData.edns) {
+            xml += '    <Edns>\n';
+            xml += addElement('Geo', data.ipApiData.edns.geo, 6);
+            xml += addElement('Ip', data.ipApiData.edns.ip, 6);
+            xml += '    </Edns>\n';
+        }
+        xml += '  </IpApiData>\n';
+    }
 
     xml += '</PageData>';
     return xml;
