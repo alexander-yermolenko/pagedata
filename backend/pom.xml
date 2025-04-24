@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.yermolenko</groupId>
-	<artifactId>seodata</artifactId>
+	<artifactId>pagedata</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>seodata</name>
-	<description>Demo project for Spring Boot</description>
+	<name>pagedata</name>
+	<description>PageData - a tool for page analysis</description>
 	<url/>
 	<licenses>
 		<license/>

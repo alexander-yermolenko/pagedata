@@ -1,17 +1,17 @@
-package com.yermolenko.seodata;
+package com.yermolenko.pagedata;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class SeodataService {
+public class PagedataService {
 
 	private final JsoupParser jsoupParser;
 
-	public SeodataService(JsoupParser jsoupParser) {
+	public PagedataService(JsoupParser jsoupParser) {
 		this.jsoupParser = jsoupParser;
 	}
 
-	public Seodata extractData(String url) {
+	public Pagedata extractData(String url) {
 		String normalizedUrl = normalizeUrl(url);
 		return jsoupParser.parse(normalizedUrl);
 	}

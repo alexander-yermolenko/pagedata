@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEO Data Extractor</title>
+    <title>Page Data Extractor</title>
     <link rel="stylesheet" href="src/style.css">
+    <link rel="icon" type="image/png" href="/icon.png">
 </head>
 <body>
     <div class="container">
-        <h1>SEO Data Extractor</h1>
+        <img src="/icon.svg" alt="Page Data Extractor Icon" class="app-icon">
+        <h1>Page Data Extractor</h1>
         
         <div class="input-group">
             <label for="url">Enter Website URL</label>
@@ -19,15 +21,18 @@
             >
         </div>
 
-        <button id="extractBtn">Extract SEO Data</button>
+        <button id="extractBtn">Extract Page Data</button>
 
         <div id="error" class="error hidden"></div>
-        <div id="loading" class="loading hidden">Loading...</div>
+        <div id="loading" class="loading hidden">⏳ Loading...</div>
 
         <div id="result" class="result hidden">
-            <h2>Results</h2>
-            <pre id="jsonOutput"></pre>
-            <button id="downloadBtn">Download JSON</button>
+            <h2>✅ Results</h2>
+            <div id="summaryOutput" class="summary"></div>
+            <div class="result-actions">
+                <button id="downloadJsonBtn" class="download-btn">Download JSON</button>
+                <button id="downloadXmlBtn" class="download-btn">Download XML</button>
+            </div>
         </div>
     </div>
 

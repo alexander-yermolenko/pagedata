@@ -1,8 +1,8 @@
-package com.yermolenko.seodata;
+package com.yermolenko.pagedata;
 
 import java.util.List;
 
-public class Seodata {
+public class Pagedata {
 	private String title;
 	private String metaNameDescription;
 	private String metaNameRobots;
